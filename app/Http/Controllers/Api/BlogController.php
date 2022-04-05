@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -28,17 +29,21 @@ class BlogController extends Controller
             'category_id' => 'required',
             'title' => 'required|unique:blogs,title',
             'details' => 'required',
+            'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'msg' => $validator->errors()]);
         } else {
+            $fileName = Auth::user()->id.'_'.Str::random(20).'.'.strtolower(trim($request->file('image')->getClientOriginalExtension()));
+            $request->file('image')->move('images', $fileName);
 
             $data = Blog::create([
                 'user_id' => Auth::user()->id,
                 'category_id' => $request->category_id,
                 'title' => $request->title,
                 'details' => $request->details,
+                'image' => url('/').'/images/'.$fileName,
             ]);
 
             if ($data) {
@@ -77,7 +82,7 @@ class BlogController extends Controller
     public function update(Request $request, $id)
     {
         $validator =  Validator::make($request->all(), [
-            'category_id' => 'required',
+            'category_id' => 'required|unique:blogs,title,' . $id,
             'title' => 'required|unique:blogs,title',
             'details' => 'required',
         ]);
@@ -87,7 +92,8 @@ class BlogController extends Controller
         } else {
 
             $data = Blog::where('id', $id)
-                        ->update(['category_id' => $request->category_id, 'title' => $request->title, 'details' => $request->details,]);
+                        ->where('user_id', Auth::user()->id)
+                        ->update(['category_id' => $request->category_id, 'title' => $request->title, 'details' => $request->details]);
 
             if ($data) {
                 return response()->json(['status' => 'success', 'msg' => 'Blog Update Successfully!!']);

@@ -24,7 +24,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validator =  Validator::make($request->all(), [
-            'cat_name' => 'required|unique:categories,cat_name,' . Auth::user()->id . ',user_id',
+            'cat_name' => 'required|unique:categories,cat_name',
         ]);
 
         if ($validator->fails()) {
@@ -69,7 +69,24 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $request;
+        $validator =  Validator::make($request->all(), [
+            'cat_name' => 'required|unique:categories,cat_name,' . $id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'msg' => $validator->errors()]);
+        } else {
+
+            $data = Category::where('id', $id)
+                        ->where('user_id', Auth::user()->id)
+                        ->update(['cat_name' => $request->cat_name]);
+
+            if ($data) {
+                return response()->json(['status' => 'success', 'msg' => 'Category Update Successfully!!']);
+            } else {
+                return response()->json(['status' => 'error', 'msg' => "Category Update Failed!!"]);
+            }
+        }
     }
 
     public function destroy($id)
