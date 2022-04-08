@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\FrontEndController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +24,6 @@ Route::post('/login', [AuthController:: class, 'Login']); //Login User
 Route::group(['middleware' => ['auth:sanctum']], function(){ 
     Route::resource('/category', CategoryController::class); // Category Route List
     Route::resource('/blog', BlogController::class); // Blog Route List
+    Route::resource('/blogs', FrontEndController::class); // Front Blog View Route List
     Route::post('/logout', [AuthController:: class, 'Logout']); //Logout User 
 }); 

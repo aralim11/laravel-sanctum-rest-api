@@ -16,4 +16,9 @@ class Blog extends Model
         'details',
         'image',
     ];
+
+    public function categoryName()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
 }
