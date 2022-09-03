@@ -19,4 +19,26 @@ class FrontEndController extends Controller
             return response()->json(['status' => 'success', 'msg' => 'No Data Found']);
         }
     }
+
+    public function show($id)
+    {
+        $data = Blog::where('id', $id)->with(['categoryName', 'userName'])->first();
+
+        if (!empty($data)) {
+            return response()->json(['status' => 'success', 'msg' => $data]);
+        } else {
+            return response()->json(['status' => 'success', 'msg' => 'No Data Found']);
+        }
+    }
+
+    public function simillerCat($cat_id)
+    {
+        $data = Blog::where('category_id', $cat_id)->inRandomOrder()->limit(4)->get();
+
+        if (!empty($data)) {
+            return response()->json(['status' => 'success', 'msg' => $data]);
+        } else {
+            return response()->json(['status' => 'success', 'msg' => 'No Data Found']);
+        }
+    }
 }

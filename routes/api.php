@@ -20,10 +20,11 @@ use App\Http\Controllers\Api\FrontEndController;
 
 Route::post('/register', [AuthController:: class, 'Register']); //Register User
 Route::post('/login', [AuthController:: class, 'Login']); //Login User
-Route::resource('/blogs', FrontEndController::class); // Front Blog View Route List
+Route::resource('/blogs', FrontEndController::class); // View All Blog List
+Route::get('/blogs-similler-cat/{cat_id}', [FrontEndController::class, 'simillerCat']); //get similler category post
 
-Route::group(['middleware' => ['auth:sanctum']], function(){ 
+Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::resource('/category', CategoryController::class); // Category Route List
     Route::resource('/blog', BlogController::class); // Blog Route List
-    Route::post('/logout', [AuthController:: class, 'Logout']); //Logout User 
-}); 
+    Route::post('/logout', [AuthController:: class, 'Logout']); //Logout User
+});
