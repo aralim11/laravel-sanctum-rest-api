@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->string('title');
             $table->text('details');
+            $table->enum('status', ['Pending', 'Deactive', 'Active'])->default('Active');
             $table->text('image')->default('img.png');
             $table->timestamps();
         });

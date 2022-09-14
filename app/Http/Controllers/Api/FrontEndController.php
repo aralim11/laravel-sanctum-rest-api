@@ -11,7 +11,7 @@ class FrontEndController extends Controller
 {
     public function index()
     {
-        $data = Blog::with(['categoryName', 'userName'])->get();
+        $data = Blog::select('id', 'title', 'image', 'created_at')->get();
 
         if (!empty($data)) {
             return response()->json(['status' => 'success', 'msg' => $data]);
@@ -22,7 +22,7 @@ class FrontEndController extends Controller
 
     public function show($id)
     {
-        $data = Blog::where('id', $id)->with(['categoryName', 'userName'])->first();
+        $data = Blog::select('id', 'title', 'image', 'created_at', 'category_id', 'user_id', 'details')->where('id', $id)->with(['categoryName', 'userName'])->first();
 
         if (!empty($data)) {
             return response()->json(['status' => 'success', 'msg' => $data]);
@@ -33,7 +33,7 @@ class FrontEndController extends Controller
 
     public function simillerCat($cat_id)
     {
-        $data = Blog::where('category_id', $cat_id)->inRandomOrder()->limit(4)->get();
+        $data = Blog::select('id', 'title', 'image', 'created_at')->where('category_id', $cat_id)->inRandomOrder()->limit(4)->get();
 
         if (!empty($data)) {
             return response()->json(['status' => 'success', 'msg' => $data]);

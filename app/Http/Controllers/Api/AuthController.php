@@ -32,10 +32,10 @@ class AuthController extends Controller
             if ($user) {
                 $token = $user->createToken($request->email)->plainTextToken;
 
-                return response()->json(['status' => 'success', 'token' => $token]);
+                return response()->json(['status' => 'success', 'token' => $token, 'userId' => $user->id]);
             } else {
                 return response()->json(['status' => 'error', 'msg' => "Registration Failed!!"]);
-            } 
+            }
         }
     }
 
@@ -58,9 +58,9 @@ class AuthController extends Controller
             } else {
                 $token = $user->createToken($request->email)->plainTextToken;
 
-                return response()->json(['status' => 'success', 'token' => $token]);
+                return response()->json(['status' => 'success', 'token' => $token, 'userId' => $user->id]);
             }
-        } 
+        }
     }
 
 
