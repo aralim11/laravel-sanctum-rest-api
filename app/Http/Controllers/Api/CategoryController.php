@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 
 class CategoryController extends Controller
 {
     public function index()
-    {
-        $data = Category::where('user_id', Auth::user()->id)->get();
+    { 
+        $data = Category::select('id', 'cat_name', 'created_at')->where('user_id', Auth::user()->id)->get();
 
         if (!empty($data)) {
             return response()->json(['status' => 'success', 'msg' => $data]);

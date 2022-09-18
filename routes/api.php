@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routes 
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
