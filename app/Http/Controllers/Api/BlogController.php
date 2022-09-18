@@ -13,7 +13,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $data = Blog::where('user_id', Auth::user()->id)->get();
+        $data = Blog::select('id', 'category_id', 'title', 'status', 'created_at')->with(['categoryName'])->where('user_id', Auth::user()->id)->get();
 
         if (!empty($data)) {
             return response()->json(['status' => 'success', 'msg' => $data]);
@@ -29,21 +29,22 @@ class BlogController extends Controller
             'category_id' => 'required',
             'title' => 'required|unique:blogs,title',
             'details' => 'required',
-            'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
+            // 'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'msg' => $validator->errors()]);
         } else {
-            $fileName = Auth::user()->id.'_'.Str::random(20).'.'.strtolower(trim($request->file('image')->getClientOriginalExtension()));
-            $request->file('image')->move('images', $fileName);
+            // $fileName = Auth::user()->id.'_'.Str::random(20).'.'.strtolower(trim($request->file('image')->getClientOriginalExtension()));
+            // $request->file('image')->move('images', $fileName);
 
             $data = Blog::create([
                 'user_id' => Auth::user()->id,
                 'category_id' => $request->category_id,
                 'title' => $request->title,
                 'details' => $request->details,
-                'image' => url('/').'/images/'.$fileName,
+                // 'image' => url('/').'/images/'.$fileName,
+                'image' => url('/').'/images/default.png',
             ]);
 
             if ($data) {
